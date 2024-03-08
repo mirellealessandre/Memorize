@@ -12,6 +12,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             cards
+            Spacer()
             cardCountAdjusters
         }
         .padding()
@@ -28,7 +29,7 @@ struct ContentView: View {
     }
     
     var cards: some View {
-        HStack {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
             ForEach(0..<cardCount, id: \.self) { index in
                 CardView(content: emojis[index])
             }
