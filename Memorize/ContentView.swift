@@ -5,35 +5,40 @@ import SwiftUI
 }
 
 struct ContentView: View {
-    let emojis: [String] = ["🐮", "🪰", "🐗", "🐷", "🐙", "🐥", "🦄", "🐔", "🦇", "🐞", "🪼", "🦧"]
+    let vehicles: [String] = ["🚗", "🚕", "🚌", "🚎", "🏎️", "🚓", "🚚", "🛴", "✈️", "🚆"]
+    
+    let animals: [String] = ["🐮", "🪰", "🐗", "🐷", "🦧", "🐞", "🪼"]
+    
+    let foods: [String] = ["🍏", "🍟", "🥑", "🧆", "🍇", "🍰", "🥝", "🍩", "🍍", "🥥"]
+    
+    @State var deckOfCards: [String] = []
     
     @State var cardCount: Int = 4
     
     var body: some View {
         VStack {
+            Text("Memorize!")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+            
             ScrollView {
                 cards
             }
-            Spacer()
-            cardCountAdjusters
         }
         .padding()
-    }
-    
-    var cardCountAdjusters: some View {
+        
         HStack {
-            cardRemover
-            Spacer()
-            cardAdder
+            vehiclesThemeButton
+            animalThemeButton
+            foodThemeButton
         }
-        .imageScale(.large)
-        .font(.largeTitle)
     }
     
     var cards: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
-            ForEach(0..<cardCount, id: \.self) { index in
-                CardView(content: emojis[index])
+            ForEach(deckOfCards.indices, id: \.self) { index in
+                CardView(content: deckOfCards[index])
+                CardView(content: deckOfCards[index])
                     .aspectRatio(2/3, contentMode: .fit)
             }
         }
@@ -41,23 +46,32 @@ struct ContentView: View {
         .foregroundColor(.orange)
     }
     
-    func cardCountAdjuster(by offset: Int, symbol: String) -> some View {
-        Button(action: {
-            cardCount += offset
-        }, label: {
-            Image(systemName: symbol)
-        })
-        .disabled(cardCount + offset < 1 || cardCount + offset > emojis.count)
+    var vehiclesThemeButton: some View {
+        return makeButtonAndCards(themeName: "Vehicles", cards: vehicles, symbol: "car.circle")
     }
     
-    var cardRemover: some View {
-        return cardCountAdjuster(by: -1, symbol: "rectangle.stack.fill.badge.minus")
+    var animalThemeButton: some View {
+        return makeButtonAndCards(themeName: "Animals", cards: animals, symbol: "pawprint.circle")
+    }
+
+    var foodThemeButton: some View {
+        return makeButtonAndCards(themeName: "Food", cards: foods, symbol: "fork.knife.circle" )
     }
     
-    var cardAdder: some View {
-        return cardCountAdjuster(by: +1, symbol: "rectangle.stack.fill.badge.plus")
+    func makeButtonAndCards(themeName: String, cards: [String], symbol: String ) -> some View {
+        VStack {
+            Button(action: {
+                deckOfCards = cards
+            }, label: {
+                Image(systemName: symbol)
+                    .imageScale(.large)
+                    .font(.largeTitle)
+            })
+            Text(themeName)
+                .font(.system(size: 15))
+                .foregroundStyle(.blue)
+        }
     }
-    
 }
 
 struct CardView: View {
@@ -72,8 +86,8 @@ struct CardView: View {
                 base.strokeBorder(lineWidth: 2)
                 Text(content).font(.largeTitle)
             }
-            .opacity(isFaceUp ? 1 : 0)
-            base.fill().opacity(isFaceUp ? 0 : 1)
+            .opacity(isFaceUp ? 0 : 1)
+            base.fill().opacity(isFaceUp ? 1 : 0)
         }
         .onTapGesture {
             isFaceUp.toggle()
