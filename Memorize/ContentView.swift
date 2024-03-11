@@ -5,6 +5,8 @@ import SwiftUI
 }
 
 struct ContentView: View {
+    var viewModel: EmojiMemoryGame
+    
     let vehicles: [String] = ["🚗", "🚕", "🚌", "🚎", "🏎️", "🚓", "🚚", "🛴", "✈️", "🚆"]
     
     let animals: [String] = ["🐮", "🪰", "🐗", "🐷", "🦧", "🐞", "🪼"]
