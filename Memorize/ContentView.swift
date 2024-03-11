@@ -12,18 +12,16 @@ struct ContentView: View {
     let foods: [String] = ["🍏", "🍟", "🥑", "🧆", "🍇", "🍰", "🥝", "🍩", "🍍", "🥥"]
     
     @State var deckOfCards: [String] = []
-    
-    @State var cardCount: Int = 4
-    
+        
     var body: some View {
         VStack {
             Text("Memorize!")
                 .font(.largeTitle)
                 .fontWeight(.bold)
-            
-            ScrollView {
-                cards
-            }
+        }
+        
+        ScrollView {
+            cards
         }
         .padding()
         
@@ -35,9 +33,8 @@ struct ContentView: View {
     }
     
     var cards: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 85))]) {
             ForEach(deckOfCards.indices, id: \.self) { index in
-                CardView(content: deckOfCards[index])
                 CardView(content: deckOfCards[index])
                     .aspectRatio(2/3, contentMode: .fit)
             }
@@ -61,7 +58,8 @@ struct ContentView: View {
     func makeButtonAndCards(themeName: String, cards: [String], symbol: String ) -> some View {
         VStack {
             Button(action: {
-                deckOfCards = cards
+                let duplicatedCards = cards + cards
+                deckOfCards = duplicatedCards.shuffled()
             }, label: {
                 Image(systemName: symbol)
                     .imageScale(.large)
